@@ -37,8 +37,8 @@ Diagrama: `docs/diagrama_er.png`
 ## Cómo ejecutarlo
 
 ```bash
-git clone <URL-DEL-REPOSITORIO>
-cd <nombre-de-la-carpeta>
+git clone https://github.com/migueljortiz/sistema-restaurante.git
+cd sistema-restaurante
 
 python -m venv env
 env\Scripts\activate
