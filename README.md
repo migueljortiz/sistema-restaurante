@@ -1,75 +1,53 @@
 # Sistema de Pedidos de Restaurante
 
-Proyecto Django del segundo corte de Ingeniería de Sistemas (Uniguajira).
-
-Sistema para registrar los pedidos de un restaurante. Permite gestionar el menú organizado por categorías, las mesas, los meseros y los pedidos de cada mesa con los platos solicitados, sus cantidades y el pago. Toda la información se registra desde el panel de administración de Django.
+## Descripción
+Sistema web para registrar los pedidos de un restaurante. Permite manejar el menú organizado por categorías, las mesas, los meseros y los pedidos de cada mesa con los platos solicitados, sus cantidades y su pago. Está pensado para el personal del restaurante: administrador, mesero, cocinero y cajero.
 
 ## Integrantes
-- Miguel Ortiz
-- Adrian Pimienta
-- Josep Romero
+- Miguel Ortiz – migueljortiz
+- Adrian Pimienta – yeimerpimienta
+- Josep Romero – joshepdavid987
 
-## Actores y casos de uso
+## Tecnologías
+- Django 6.1.2
+- Python 3.13
+- Bootstrap 5.3.3, incluido por CDN en `templates/base.html` (hoja de estilos y script desde cdn.jsdelivr.net)
+- SQLite como base de datos
 
-| Actor | Casos de uso |
-|---|---|
-| Administrador | Gestionar menú, gestionar mesas, gestionar meseros, consultar reporte de ventas |
-| Mesero | Registrar pedido, actualizar pedido, consultar menú, consultar mesas |
-| Cocinero | Consultar pedidos pendientes, actualizar estado del pedido, consultar observaciones del pedido |
-| Cajero | Consultar cuenta del pedido, registrar pago, consultar historial de pagos |
+## Tablas principales
+| Tabla | Descripción |
+| --- | --- |
+| tbl_categoria | Categorías del menú |
+| tbl_plato | Platos del menú (relación 1:N con categoría) |
+| tbl_mesa | Mesas del restaurante |
+| tbl_mesero | Meseros |
+| tbl_pedido | Pedido de una mesa atendido por un mesero |
+| tbl_detalle_pedido | Tabla intermedia N:M entre pedido y plato (cantidad, observación, precio); entidad débil de pedido |
+| tbl_pago | Pago de un pedido (relación 1:1) |
 
-Diagrama: `docs/diagrama_actores.png`
+## Diagramas
+- Actores: docs/diagrama_actores.png
+- Entidad-relación: docs/diagrama_er.png
 
-## Modelo de datos
+## Funcionalidades
+- **CRUD completo de pedidos** (mesa, mesero y platos con cantidad), con página propia para cada acción:
+  - Listar: `/`
+  - Crear: `/nuevo/`
+  - Editar: `/<id>/editar/`
+  - Eliminar (con confirmación): `/<id>/eliminar/`
+- Mensajes de confirmación después de guardar, actualizar o eliminar.
+- Plantilla base con barra de navegación, menú lateral, tarjetas y pie de página.
+- El panel de administración sigue funcionando en `/admin/`.
 
-Diagrama: `docs/diagrama_er.png`
+## Cómo ejecutar el proyecto
+1. git clone https://github.com/migueljortiz/sistema-restaurante.git
+2. python -m venv env
+3. env\Scripts\activate   (Linux/macOS: source env/bin/activate)
+4. pip install -r requirements.txt
+5. python manage.py migrate
+6. python manage.py runserver
 
-| App | Tabla | Descripción |
-|---|---|---|
-| categorias | tbl_categoria | Categorías del menú |
-| platos | tbl_plato | Platos del menú (relación 1:N con categoría) |
-| mesas | tbl_mesa | Mesas del restaurante |
-| meseros | tbl_mesero | Meseros |
-| pedidos | tbl_pedido | Pedido de una mesa atendido por un mesero |
-| detalles_pedido | tbl_detalle_pedido | Tabla intermedia N:M entre pedido y plato (cantidad, observación, precio) |
-| pagos | tbl_pago | Pago de un pedido (relación 1:1) |
+Abrir en el navegador: http://127.0.0.1:8000/
 
-## Cómo ejecutarlo
-
-```bash
-git clone https://github.com/migueljortiz/sistema-restaurante.git
-cd sistema-restaurante
-
-python -m venv env
-env\Scripts\activate
-
-pip install -r requirements.txt
-python manage.py runserver
-```
-
-Abrir en el navegador: http://127.0.0.1:8000/admin/
-
-La base de datos `db.sqlite3` ya incluye los datos de prueba, así que no hace falta ejecutar migraciones.
-
-## Credenciales del superusuario
-
-- Usuario: `migueljortiz`
-- Contraseña: `MJOD1996`
-
-## Estructura del proyecto
-
-```
-mi_proyecto/
-├── taller/            # settings.py, urls.py
-├── categorias/        # modelo Categoria
-├── platos/            # modelo Plato
-├── mesas/             # modelo Mesa
-├── meseros/           # modelo Mesero
-├── pedidos/           # modelo Pedido
-├── detalles_pedido/   # modelo DetallePedido (tabla intermedia del N:M)
-├── pagos/             # modelo Pago
-├── docs/              # diagramas
-├── manage.py
-├── requirements.txt
-└── README.md
-```
+## Usuarios de prueba
+- Superusuario del admin: usuario `migueljortiz`, contraseña `MJOD1996`

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block titulo %}{{ titulo }}{% endblock %}
+
+{% block contenido %}
+<form method="post">
+    {% csrf_token %}
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">{{ titulo }}</div>
+        <div class="card-body">
+            {{ form.non_field_errors }}
+            <div class="row">
+                {% for campo in form %}
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">{{ campo.label }}</label>
+                    {{ campo }}
+                    {% for error in campo.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">Platos del pedido</div>
+        <div class="card-body">
+            {{ formset.management_form }}
+            {% if formset.non_form_errors %}
+            <div class="alert alert-danger">{{ formset.non_form_errors }}</div>
+            {% endif %}
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Plato</th>
+                        <th>Cantidad</th>
+                        <th>Observación</th>
+                        <th>Precio unitario</th>
+                        {% if formset.can_delete %}<th>Quitar</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in formset %}
+                    <tr>
+                        {% for oculto in f.hidden_fields %}{{ oculto }}{% endfor %}
+                        <td>{{ f.fk_pla }}{% for e in f.fk_pla.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</td>
+                        <td>{{ f.det_cantidad }}{% for e in f.det_cantidad.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</td>
+                        <td>{{ f.det_observacion }}</td>
+                        <td>{{ f.det_precio }}{% for e in f.det_precio.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</td>
+                        {% if formset.can_delete %}<td class="text-center">{{ f.DELETE }}</td>{% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <small class="text-muted">Llena solo las filas que necesites; las vacías se ignoran.</small>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-principal">Guardar</button>
+    <a href="{% url 'pedidos:lista' %}" class="btn btn-outline-secondary">Cancelar</a>
+</form>
+{% endblock %}
