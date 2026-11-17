@@ -18,6 +18,7 @@
                     <th>Fecha</th>
                     <th>Estado</th>
                     <th>Platos</th>
+                    <th class="text-center">Detalles</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -30,13 +31,20 @@
                     <td>{{ p.ped_fecha|date:"d/m/Y H:i" }}</td>
                     <td><span class="badge bg-secondary">{{ p.get_ped_estado_display }}</span></td>
                     <td>{{ p.detalles.count }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'pedidos:detalle' p.pk_ped_id %}"
+                           class="text-decoration-none"
+                           style="font-size: 15px; color: #000;">
+                            &#128065;
+                        </a>
+                    </td>
                     <td>
                         <a href="{% url 'pedidos:editar' p.pk_ped_id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
                         <a href="{% url 'pedidos:eliminar' p.pk_ped_id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
                     </td>
                 </tr>
                 {% empty %}
-                <tr><td colspan="7" class="text-center">No hay pedidos registrados.</td></tr>
+                <tr><td colspan="8" class="text-center">No hay pedidos registrados.</td></tr>
                 {% endfor %}
             </tbody>
         </table>

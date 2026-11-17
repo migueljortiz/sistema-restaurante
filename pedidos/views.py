@@ -62,3 +62,29 @@ def eliminar(request, pk):
         messages.success(request, f"Pedido #{pk} eliminado correctamente.")
         return redirect("pedidos:lista")
     return render(request, "pedidos/confirmar_eliminar.html", {"pedido": pedido})
+
+
+def detalle(request, pk):
+    pedido = get_object_or_404(
+        Pedido.objects.select_related(
+            "fk_mes", "fk_mse"
+        ).prefetch_related("detalles__fk_pla"),
+        pk=pk
+    )
+
+    detalles = list(pedido.detalles.all())
+
+    for d in detalles:
+        d.subtotal = d.det_cantidad * d.det_precio
+
+    total = sum(d.subtotal for d in detalles)
+
+    return render(
+        request,
+        "pedidos/detalle.html",
+        {
+            "pedido": pedido,
+            "detalles": detalles,
+            "total": total,
+        }
+    )
